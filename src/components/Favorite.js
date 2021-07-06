@@ -9,6 +9,7 @@ export class Favorite extends Component {
         this.state = {
             favDrinks: [],
             show: false,
+            id: -1,
         }
     }
 
@@ -17,9 +18,10 @@ export class Favorite extends Component {
             show: false,
         })
     }
-    handleShow = () => {
+    handleShow = (e, item) => {
         this.setState({
             show: true,
+            id: item.idDrink
         })
     }
 
@@ -52,7 +54,7 @@ export class Favorite extends Component {
         const reqBody = {
             strDrink: e.target.title.value,
             strDrinkThumb: e.target.image.value,
-            idDrink: item.idDrink
+            idDrink: this.state.id
         }
         await axios.put(`http://localhost:8000/updateFav`, reqBody)
             .then(response => {
@@ -82,7 +84,7 @@ export class Favorite extends Component {
                                         <Card.Img variant="top" src={item.strDrinkThumb} />
                                         <Card.Body>
                                             <Card.Title>{item.strDrink}</Card.Title>
-                                            <Button variant="primary" onClick={this.handleShow}>Update</Button>
+                                            <Button variant="primary" onClick={(e) => this.handleShow(e, item)}>Update</Button>
                                             <Button variant="primary" onClick={(e) => this.deleteFav(e, item)}>Delete</Button>
                                         </Card.Body>
                                         <UpdateForm
